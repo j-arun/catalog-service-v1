@@ -1,7 +1,7 @@
-package com.example.catalog.controller;
+package com.example.catalog.resource;
 
 import com.example.catalog.entity.Product;
-import com.example.catalog.repository.ProductRepository;
+import com.example.catalog.service.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
-import java.util.Optional;
+
 
 
 @Api(
@@ -22,14 +22,14 @@ value = "Product",
 produces = "application/json")
 @RestController
 @RequestMapping("/catalog")
-public class CatalogController{
+public class CatalogResource{
 
-	private Logger logger = LoggerFactory.getLogger(CatalogController.class);
+	private Logger logger = LoggerFactory.getLogger(CatalogResource.class);
 
     @Autowired
-    private ProductRepository productRepository;
+    private CatalogService service;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST ,value="add")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "adds the given product to catalog", notes = "Adds products to catalog")
@@ -40,10 +40,10 @@ public class CatalogController{
     public  ResponseEntity<String> addProduct(@ApiParam(value = "Product added to catalog")
     @RequestBody Product product) {
         logger.debug("Entered add() >>"+product);
-        productRepository.save(product);
-        logger.info("Product added to catalog : id :"+product.getId());
+        long id =  service.addProduct(product);
+        logger.info("Product added to catalog : id :"+id);
         logger.debug("Exited add() >>"+product);
-        return new ResponseEntity<String>("Created :"+product.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<String>("Created :"+id, HttpStatus.CREATED);
     }
 
     @RequestMapping(method= RequestMethod.GET,value="getall" )
@@ -52,11 +52,11 @@ public class CatalogController{
     @ApiOperation(value = "list products in catalog", notes = "lists  all product in the catalog with state, regoin code and availablity status")
     public  List<Product> getAllProducts() {
     	  logger.debug("Entered getAllProducts >>");
-          return (List<Product>)productRepository.findAll();
+          return service.getAllProducts();
     }
 
 
-    @DeleteMapping("/delete/{product}")
+    @DeleteMapping("/delete/{productId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "delete the given product from catalog", notes = "Delete  products from catalog")
     @ApiResponses(value=
@@ -64,16 +64,10 @@ public class CatalogController{
                     @ApiResponse(code = 400, message = "Error occurred while processing request")}
     )
     public  ResponseEntity<String> delete(@ApiParam(value = "delete  product from catalog")
-                                              @PathVariable long product) {
-        logger.debug("Entered add() >>"+product);
-        Optional<Product> isAvailable =  productRepository.findById(product);
-        if (isAvailable.isPresent()) {
-            productRepository.deleteById(product);
-            logger.info("Product delete from catalog : id :" + product);
-        }else{
-            logger.info("No Product  with  id :" + product);
-        }
-        logger.debug("Exited delete() >>"+product);
-        return new ResponseEntity<String>("deleted :"+product, HttpStatus.OK);
+                                              @PathVariable long productId) {
+        logger.debug("Entered delete() >>"+productId);
+        long id = service.deleteProduct(productId);
+        logger.debug("Exited delete() >>"+productId);
+        return new ResponseEntity<String>("deleted :"+ id, HttpStatus.OK);
     }
 }
