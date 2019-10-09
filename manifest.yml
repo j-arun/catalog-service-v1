@@ -1,0 +1,12 @@
+---
+applications:
+- name: catalog-service-v1
+  memory: 1G
+  instances: 2
+  random-route: false
+  path: target/catalog-service-1.0.jar
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git  
+  services:
+    - mysql-iot-pcf
+    - service-registry
+
