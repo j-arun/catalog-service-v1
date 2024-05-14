@@ -1,0 +1,5 @@
+/Users/jarun/move2kubeHome/catalog-service-v1/src/main/java/com/example/catalog/CatalogApplication.java
+/Users/jarun/move2kubeHome/catalog-service-v1/src/main/java/com/example/catalog/entity/Product.java
+/Users/jarun/move2kubeHome/catalog-service-v1/src/main/java/com/example/catalog/service/CatalogService.java
+/Users/jarun/move2kubeHome/catalog-service-v1/src/main/java/com/example/catalog/repository/ProductRepository.java
+/Users/jarun/move2kubeHome/catalog-service-v1/src/main/java/com/example/catalog/resource/CatalogResource.java

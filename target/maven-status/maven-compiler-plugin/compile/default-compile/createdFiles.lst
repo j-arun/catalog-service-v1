@@ -1,0 +1,5 @@
+com/example/catalog/service/CatalogService.class
+com/example/catalog/repository/ProductRepository.class
+com/example/catalog/resource/CatalogResource.class
+com/example/catalog/entity/Product.class
+com/example/catalog/CatalogApplication.class
